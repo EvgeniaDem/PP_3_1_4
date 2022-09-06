@@ -91,7 +91,7 @@
 
 
                                         <!-- Modal EDIT-->
-                                        <!-- Button trigger modal -->
+                                        <!-- Button EDIT -->
                                         <button type="button" class="btn btn-info btn-primary" data-toggle="modal"
                                                 th:data-target="'#edit' + ${user.id}">
                                             Edit
@@ -157,7 +157,7 @@
 
                                                             <div class="form-group">
                                                                 <label th:for="'roles' + ${user.id}"><b>Role</b></label>
-                                                                <select multiple class="custom-select" name="roles"
+                                                                <select multiple class="form-select" name="roles"
                                                                         th:id="'roles' + ${user.id}" size="2">
                                                                     <option th:if="${user.roles.contains(role)}"
                                                                             th:each="role: ${roles}"
@@ -191,7 +191,7 @@
                                     </td>
                                     <td>
                                         <!-- Modal DELETE-->
-                                        <!-- Button trigger modal -->
+                                        <!-- Button DELETE -->
                                         <button type="button" class="btn btn-danger btn-primary" data-toggle="modal"
                                                 th:data-target="'#delete' + ${user.id}">
                                             Delete
@@ -250,7 +250,7 @@
 
                                                             <div class="form-group">
                                                                 <label th:for="'roles' + ${user.id}"><b>Role</b></label>
-                                                                <select disabled multiple class="custom-select"
+                                                                <select disabled multiple class="form-select"
                                                                         name="roles" th:id="'roles' + ${user.id}"
                                                                         size="2">
                                                                     <option th:if="${user.roles.contains(role)}"
@@ -325,7 +325,7 @@
 
                                 <div class="form-group">
                                     <label for="roles"><b>Role</b></label>
-                                    <select multiple class="custom-select" name="roles" id="roles" size="2">
+                                    <select multiple class="form-select" name="roles" id="roles" size="2">
                                         <option th:each="role: ${roles}"
                                                 th:value="${role.name}"
                                                 th:text="${role.name}"></option>
