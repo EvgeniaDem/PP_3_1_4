@@ -50,7 +50,7 @@
         <div class="col-10 bg-light">
             <div class="tab-content" id="v-pills-tabContent">
 
-                <!--ADMIN &ndash;&gt; TABLE OF USERS + ADD FORM-->
+                <!--ADMIN PANEL + TABLE OF USERS + ADD FORM-->
                 <div th:if="${currentUser.isAdmin()}" class="tab-pane fade show active" id="v-pills-home"
                      role="tabpanel" aria-labelledby="v-pills-home-tab">
                     <br>
@@ -342,7 +342,7 @@
                         </div>
                     </div>
                 </div>
-                <!--ADMIN &ndash;&gt; TABLE OF USERS + ADD FORM ENDS-->
+                <!--ADMIN PANEL + TABLE OF USERS + ADD FORM ENDS-->
 
                 <!--LOGGED USER INFO-->
                 <div th:if="${currentUser.isUser()}"

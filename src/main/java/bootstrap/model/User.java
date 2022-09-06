@@ -9,6 +9,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@NamedEntityGraph(name = "graph.User.roles",
+        attributeNodes = @NamedAttributeNode("roles"))
 public class User implements UserDetails {
 
     @Id
@@ -31,7 +33,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<Role> roles;
