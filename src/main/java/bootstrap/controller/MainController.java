@@ -58,6 +58,7 @@ public class MainController {
 
     @PostMapping(value = "/deleteUser")
     public String delete(User user) {
+        System.out.println("ID controller: " + user.getId());
         userService.deleteUserById(user.getId());
         return "redirect:/";
     }
