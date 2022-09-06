@@ -1,8 +1,7 @@
 package bootstrap.service;
 
-import bootstrap.dao.RoleDao;
 import bootstrap.model.Role;
-import org.springframework.beans.factory.annotation.Autowired;
+import bootstrap.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,21 +11,19 @@ import java.util.List;
 @Transactional
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    private RoleDao roleDao;
+    private final RoleRepository roleRepository;
 
-    @Override
-    public Role getByName(String name) {
-        return roleDao.getByName(name);
+    public RoleServiceImpl(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public List<Role> getAll() {
-        return roleDao.getAll();
+        return roleRepository.findAll();
     }
 
     @Override
     public void add(Role role) {
-        roleDao.add(role);
+        roleRepository.save(role);
     }
 }

@@ -4,7 +4,6 @@ import bootstrap.model.Role;
 import bootstrap.model.User;
 import bootstrap.service.RoleService;
 import bootstrap.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +16,13 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final RoleService roleService;
 
-    @Autowired
-    private RoleService roleService;
+    public MainController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
 
     @GetMapping(value = "/login")
     public String loginPage() {

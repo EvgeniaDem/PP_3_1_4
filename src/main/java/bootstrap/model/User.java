@@ -146,17 +146,16 @@ public class User implements UserDetails {
         return this;
     }
 
-    @Transient//new
+    @Transient
     public boolean isAdmin() {
         return roles.contains(new Role("ADMIN"));
     }
 
-    @Transient//new
+    @Transient
     public boolean isUser() {
         return roles.contains(new Role("USER"));
     }
 
-    //IMPLEMENTED
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;

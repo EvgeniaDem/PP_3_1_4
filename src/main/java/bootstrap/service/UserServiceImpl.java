@@ -1,10 +1,9 @@
 package bootstrap.service;
 
-import bootstrap.dao.RoleDao;
-import bootstrap.dao.UserDao;
 import bootstrap.model.Role;
 import bootstrap.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import bootstrap.repository.RoleRepository;
+import bootstrap.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,28 +19,24 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private RoleDao roleDao;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    @Override
-    public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User getUserById(Long userId) {
-        return userDao.getUserById(userId);
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return userDao.getUserByEmail(email);
+        return userRepository.getUserByEmail(email);
     }
 
     @Override
@@ -49,28 +44,27 @@ public class UserServiceImpl implements UserService {
         if (getUserByEmail(user.getEmail()) == null) {
             String password = user.getPassword();
             user.setPassword(passwordEncoder.encode(password));
-            userDao.addUser(user.setRoles(updateRoles(user.getRoles())));
+            userRepository.save(user.setRoles(updateRoles(user.getRoles())));
         }
     }
 
     @Override
     public void editUser(User user) {
-        if (!user.getPassword().startsWith("$2a$10$")) {//check pass from db
+        if (!user.getPassword().startsWith("$2a$10$")) {
             String password = user.getPassword();
             user.setPassword(passwordEncoder.encode(password));
         }
-        userDao.editUser(user.setRoles(updateRoles(user.getRoles())));
+        userRepository.save(user.setRoles(updateRoles(user.getRoles())));
     }
 
     @Override
     public void deleteUserById(Long id) {
-        User user = userDao.getUserById(id);
-        userDao.deleteUser(user);
+        userRepository.deleteById(id);
     }
 
-    @Override//!!!!!!!!
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.getUserByEmail(username);
+        User user = userRepository.getUserByEmail(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -83,7 +77,7 @@ public class UserServiceImpl implements UserService {
         }
         return roles.stream()
                 .map(Role::getName)
-                .map(roleDao::getByName)
+                .map(roleRepository::getRoleByName)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
