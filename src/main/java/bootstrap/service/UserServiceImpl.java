@@ -4,6 +4,7 @@ import bootstrap.model.Role;
 import bootstrap.model.User;
 import bootstrap.repository.RoleRepository;
 import bootstrap.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,25 +14,37 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+// открывает/закрывает транзакции БД
 @Transactional
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserRepository userRepository;
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            throw new RuntimeException("Empty list");
+        }
+        return users;
+    }
+
+    @Override
+    public User getUserById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return user.get();
+        } else throw new UsernameNotFoundException("User with ID: " + userId + "not found");
     }
 
     @Override
@@ -50,6 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void editUser(User user) {
+        // проверяем, что пароль не имеет префикс как ниже
         if (!user.getPassword().startsWith("$2a$10$")) {
             String password = user.getPassword();
             user.setPassword(passwordEncoder.encode(password));
@@ -62,6 +76,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    // реализуем public interface UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.getUserByEmail(username);

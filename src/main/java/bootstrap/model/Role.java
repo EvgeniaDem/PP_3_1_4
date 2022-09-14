@@ -1,5 +1,6 @@
 package bootstrap.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -44,6 +45,9 @@ public class Role implements GrantedAuthority {
         this.name = name;
     }
 
+    // метод интерфейса GranterAuthority
+    //@JsonIgnore -не хотим гонять роль от клиента к серверу при каждом запросе (отключаем сериализацию)
+    @JsonIgnore
     @Override
     public String getAuthority() {
         return "ROLE_" + this.name;

@@ -1,6 +1,6 @@
 package bootstrap.config;
 
-import bootstrap.config.handler.LoginSuccessHandler;
+import bootstrap.handler.LoginSuccessHandler;
 import bootstrap.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,16 +31,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin()
-                // указываем страницу с формой логина
-                .loginPage("/login.html")
-                //указываем логику обработки при логине
+        http
+                // страница аутентификации доступна всем
+                .authorizeRequests()
+                .antMatchers("/js/**").permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/css/**").permitAll()
+                .and()
+                .formLogin()
+                // указывем страницу с формой логина
+                .loginPage("/login")
+                // указываем логику обработки при логине
                 .successHandler(new LoginSuccessHandler())
-                // указываем action с формы логина
+                //указываем action с формы логина
                 .loginProcessingUrl("/login")
-                // Указываем параметры логина и пароля с формы логина
+                //указываем параметры логина и пароля с формы логина
                 .usernameParameter("j_username")
-                .passwordParameter("j_password")
+                .usernameParameter("j_password")
                 // даем доступ к форме логина всем
                 .permitAll();
 
@@ -51,20 +59,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 // указываем URL при удачном логауте
                 .logoutSuccessUrl("/login?logout")
-                //выклчаем кроссдоменную секьюрность (на этапе обучения неважна)
+                //выключаем кроссдоменную секьюрность
                 .and().csrf().disable();
 
         http
-                // делаем страницу регистрации недоступной для авторизированных пользователей
+                //закрываем доступ на страницу авторизированным пользователям
                 .authorizeRequests()
-                //страницы аутентификаци доступна всем
+                // страница аутентификации доступна всем НЕзарегистрированным пользователям
                 .antMatchers("/login").anonymous()
                 .antMatchers("/init").anonymous()
-                // защищенные URL
+                // указываем защищенные URL
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/**").hasRole("USER")
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                // УБРАТЬ - ИСПОЛЬЗУЮ ДЛЯ ПРОВЕРКИ В POSTMAN
+                .and()
+                .httpBasic();
     }
 }

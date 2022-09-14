@@ -1,4 +1,4 @@
-package bootstrap.config.handler;
+package bootstrap.handler;
 
 import bootstrap.model.Role;
 import bootstrap.model.User;
@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// это сервлет-фильтр
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 

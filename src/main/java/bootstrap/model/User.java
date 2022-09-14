@@ -130,6 +130,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    // метод интерфейса UserDetails
     @Override
     public String getPassword() {
         return password;
@@ -148,41 +149,49 @@ public class User implements UserDetails {
         return this;
     }
 
+    // указываем, что поле не будет отражено в БД
     @Transient
     public boolean isAdmin() {
         return roles.contains(new Role("ADMIN"));
     }
 
+    // указываем, что поле не будет отражено в БД
     @Transient
     public boolean isUser() {
         return roles.contains(new Role("USER"));
     }
 
+    // метод интерфейса UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;
     }
 
+    // метод интерфейса UserDetails
     @Override
     public String getUsername() {
         return this.email;
     }
 
+    // метод интерфейса UserDetails
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    // метод интерфейса UserDetails
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    // метод интерфейса UserDetails
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    // метод интерфейса UserDetails
     @Override
     public boolean isEnabled() {
         return true;
