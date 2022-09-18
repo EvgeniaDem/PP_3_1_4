@@ -30,7 +30,7 @@ public class CurrentUserInterceptor implements HandlerInterceptor {
         if (authentication != null) {
             // объединение строк
             StringJoiner roles = new StringJoiner("|");
-            // достаем из юзера (объект authentification) его роли (authorities)
+            // достаем из юзера (объект authentication) его роли (authorities)
             // объединяем в одну строку список ролей и убираем "ROLE_"
             authentication.getAuthorities().forEach(authority -> roles.add(authority.getAuthority()
                     .replace("ROLE_", "")));

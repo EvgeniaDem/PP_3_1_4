@@ -15,7 +15,7 @@ import java.util.List;
 
 // контроллер для первого входа, когда таблицы еще пустые и ни одного юзера не создано
 @RestController
-@RequestMapping("/api/v2")
+@RequestMapping
 public class BackDoorController {
     private static final List<Role> ROLES = Arrays.asList(new Role("ADMIN"), new Role("USER"));
 

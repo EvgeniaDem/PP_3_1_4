@@ -41,7 +41,7 @@ public class MainControllerRest {
         return new ResponseEntity<>(user, OK);
     }
 
-    @PutMapping("/edit")
+    @PostMapping("/edit")
     public ResponseEntity<Void> editUser(@RequestBody User user) {
         userService.editUser(user);
         return ResponseEntity.ok().build();

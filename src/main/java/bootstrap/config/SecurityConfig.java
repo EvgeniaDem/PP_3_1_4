@@ -32,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                // страница аутентификации доступна всем
                 .authorizeRequests()
                 .antMatchers("/js/**").permitAll()
                 .and()
@@ -40,15 +39,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**").permitAll()
                 .and()
                 .formLogin()
-                // указывем страницу с формой логина
+                // указываем страницу с формой логина
                 .loginPage("/login")
-                // указываем логику обработки при логине
+                //указываем логику обработки при логине
                 .successHandler(new LoginSuccessHandler())
-                //указываем action с формы логина
+                // указываем action с формы логина
                 .loginProcessingUrl("/login")
-                //указываем параметры логина и пароля с формы логина
+                // Указываем параметры логина и пароля с формы логина
                 .usernameParameter("j_username")
-                .usernameParameter("j_password")
+                .passwordParameter("j_password")
                 // даем доступ к форме логина всем
                 .permitAll();
 
@@ -59,23 +58,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 // указываем URL при удачном логауте
                 .logoutSuccessUrl("/login?logout")
-                //выключаем кроссдоменную секьюрность
+                //выклчаем кроссдоменную секьюрность (на этапе обучения неважна)
                 .and().csrf().disable();
 
         http
-                //закрываем доступ на страницу авторизированным пользователям
+                // делаем страницу регистрации недоступной для авторизированных пользователей
                 .authorizeRequests()
-                // страница аутентификации доступна всем НЕзарегистрированным пользователям
+                //страницы аутентификаци доступна всем
                 .antMatchers("/login").anonymous()
                 .antMatchers("/init").anonymous()
-                // указываем защищенные URL
+                // защищенные URL
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/**").hasRole("USER")
-                .anyRequest().authenticated()
-                // УБРАТЬ - ИСПОЛЬЗУЮ ДЛЯ ПРОВЕРКИ В POSTMAN
-                .and()
-                .httpBasic();
+                .anyRequest().authenticated();
     }
 }
