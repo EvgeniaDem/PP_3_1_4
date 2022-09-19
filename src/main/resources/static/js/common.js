@@ -166,7 +166,7 @@ function updateUserTable() {
                                     <td>" + user.age + "</td> \
                                     <td>" + user.email + "</td> \
                                     <td>" + user.roles.map(role => role.name).join(' ') + "</td> \
-                                    <td><button type='button' class='btn btn-info' onclick='editUserForm(" + user.id + ")'>Edit</button><td> \
+                                    <td><button type='button' class='btn btn-info' onclick='editUserForm(" + user.id + ")'>Edit</button></td> \
                                     <td><button type='button' class='btn btn-danger' onclick='deleteUserForm(" + user.id + ")'>Delete</button><td> \
                              </tr>"))
         }
