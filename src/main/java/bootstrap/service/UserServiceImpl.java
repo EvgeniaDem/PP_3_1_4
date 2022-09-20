@@ -52,18 +52,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByEmail(email);
     }
 
-    // добавила только что
-/*    @Override
-    public User getFirstUserByEmail(String email) {
-        User user = userRepository.getUserByEmail("ADMIN");
-        if (user == null){
-            // singletonList возвращает immutable List - роль АДМИН нельзя изменить
-            user = new User("ADMIN", "ADMIN", Collections.singletonList(new Role("ADMIN")));
-            userRepository.save(user);
-        } return user;
-    }*/
-
-
     @Override
     public void addUser(User user) {
         if (getUserByEmail(user.getEmail()) == null) {

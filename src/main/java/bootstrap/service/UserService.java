@@ -18,7 +18,4 @@ public interface UserService extends UserDetailsService {
     void editUser(User user);
 
     void deleteUserById(Long id);
-
-    // добавила только что
-    //User getFirstUserByEmail(String name);
 }
