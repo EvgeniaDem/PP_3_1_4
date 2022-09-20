@@ -4,7 +4,6 @@ import bootstrap.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
@@ -19,4 +18,7 @@ public interface UserService extends UserDetailsService {
     void editUser(User user);
 
     void deleteUserById(Long id);
+
+    // добавила только что
+    //User getFirstUserByEmail(String name);
 }
